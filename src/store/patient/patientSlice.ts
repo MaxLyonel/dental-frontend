@@ -11,13 +11,13 @@ export const patientSlice = createSlice({
       state.patients = action.payload.patients;
     },
     setAddPatient: (state, action) => {
-      state.patients = [...state.patients, action.payload.administrator];
+      state.patients = [...state.patients, action.payload.patient];
     },
     setUpdatePatient: (state, action) => {
       state.patients = [...state.patients.map((e) => {
-        if (e.id === action.payload.administrator.id) {
+        if (e.id === action.payload.patient.id) {
           return {
-            ...action.payload.administrator
+            ...action.payload.patient
           }
         }
         return e

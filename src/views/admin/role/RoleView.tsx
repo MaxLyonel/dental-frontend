@@ -49,7 +49,7 @@ export const RoleView = () => {
           handleClose={() => handlePermisions(false, [])}
           title="Permisos"
           headers={['#', 'Nombre', 'Modulo']}
-          data={opendrawer.items.map((permission: PermissionModel) => permission)}
+          data={opendrawer.items}
         />
       }
     </>

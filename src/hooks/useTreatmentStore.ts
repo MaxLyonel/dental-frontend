@@ -1,45 +1,45 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { coffeApi } from '@/services';
-import { setPatients, setAddPatient, setUpdatePatient, setDeletePatient } from '@/store';
+import { setTreatments, setAddTreatment, setUpdateTreatment, setDeleteTreatment } from '@/store';
 import Swal from 'sweetalert2';
 
-export const usePatientStore = () => {
-  const { patients } = useSelector((state: any) => state.patients);
+export const useTreatmentStore = () => {
+  const { treatments } = useSelector((state: any) => state.treatments);
   const dispatch = useDispatch();
 
-  const getPatients = async () => {
-    console.log('OBTENIENDO PACIENTES')
-    const { data } = await coffeApi.get('/patient');
+  const getTreatments = async () => {
+    console.log('OBTENIENDO TRATAMIENTOS')
+    const { data } = await coffeApi.get('/treatment');
     console.log(data)
-    dispatch(setPatients({ patients: data.patients }));
+    dispatch(setTreatments({ treatments: data.treatments }));
   }
 
-  const postCreatePatient = async (body: object) => {
+  const postCreateTreatment = async (body: object) => {
     try {
-      console.log('CREANDO PACIENTE')
+      console.log('CREANDO UN TRATAMIENTO')
       console.log(body)
-      const { data } = await coffeApi.post(`/patient`, body);
+      const { data } = await coffeApi.post(`/treatment`, body);
       console.log(data)
-      dispatch(setAddPatient({ patient: data.patient }));
-      Swal.fire('Paciente creado correctamente', '', 'success');
+      dispatch(setAddTreatment({ treatment: data.treatment }));
+      Swal.fire('Tratamiento creado correctamente', '', 'success');
     } catch (error: any) {
       Swal.fire('Oops ocurrio algo', error.response.data.msg, 'error');
     }
   }
 
-  const putUpdatePatient = async (id: number, body: object) => {
+  const putUpdateTreatment = async (id: number, body: object) => {
     try {
       console.log('MODIFICANDO PACIENTE')
-      const { data } = await coffeApi.put(`/patient/${id}`, body);
+      const { data } = await coffeApi.put(`/treatment/${id}`, body);
       console.log(data)
-      dispatch(setUpdatePatient({ patient: data.patient }));
+      dispatch(setUpdateTreatment({ treatment: data.treatment }));
       Swal.fire('Se modifico el paciente', '', 'success');
     } catch (error: any) {
       Swal.fire('Oops ocurrio algo', error.response.data.msg, 'error');
     }
   }
 
-  const deletePatient = async (id: number) => {
+  const deleteTreatment = async (id: number) => {
     try {
       Swal.fire({
         title: '¿Estas seguro?',
@@ -53,9 +53,9 @@ export const usePatientStore = () => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           console.log('ELIMINANDO PACIENTE')
-          const { data } = await coffeApi.delete(`/patient/${id}`);
+          const { data } = await coffeApi.delete(`/treatment/${id}`);
           console.log(data)
-          dispatch(setDeletePatient({ id }));
+          dispatch(setDeleteTreatment({ id }));
           Swal.fire(
             'Eliminado',
             'Usuario eliminado correctamente',
@@ -75,11 +75,11 @@ export const usePatientStore = () => {
   }
   return {
     //* Propiedades
-    patients,
+    treatments,
     //* Métodos
-    getPatients,
-    postCreatePatient,
-    putUpdatePatient,
-    deletePatient,
+    getTreatments,
+    postCreateTreatment,
+    putUpdateTreatment,
+    deleteTreatment,
   }
 }

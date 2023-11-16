@@ -1,4 +1,4 @@
-import { Assessment, CalendarMonth, Group, Home, Receipt } from "@mui/icons-material"
+import { Assessment, CalendarMonth, Group, Home } from "@mui/icons-material"
 
 export const menu = () => {
     return [
@@ -12,17 +12,11 @@ export const menu = () => {
             permission: "show-rent",
             group: [
                 {
-                    path: "/rentalCalendarView",
+                    path: "/calendarView",
                     title: "Calendario",
                     icon: <CalendarMonth />,
                     permission: "show-rates"
                 },
-                {
-                    path: "/rentalView",
-                    title: "Tratamientos",
-                    icon: <Receipt />,
-                    permission: "show-rates"
-                }
             ]
         },
         {

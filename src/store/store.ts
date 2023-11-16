@@ -5,6 +5,7 @@ import {
     patientSlice,
     permissionSlice,
     roleSlice,
+    treatmentSlice,
 
 
 } from '.';
@@ -16,12 +17,7 @@ export const store = configureStore({
         roles: roleSlice.reducer,
         administrators: administratorSlice.reducer,
         patients: patientSlice.reducer,
-        // customers: customerSlice.reducer,
-        // products: productSlice.reducer,
-        // categories: categorySlice.reducer,
-        // unitMeasurements: unitMeasurementSlice.reducer,
-        // kardexProducts: kardexProductSlice.reducer,
-        // orders: orderSlice.reducer,
+        treatments: treatmentSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false

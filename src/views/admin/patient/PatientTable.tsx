@@ -1,10 +1,12 @@
-import { ComponentSearch, ComponentTablePagination } from "@/components";
+import { ComponentSearch, ComponentTablePagination, ShowTable } from "@/components";
 import { usePatientStore } from "@/hooks";
-import { AdministratorModel, PatientModel } from "@/models";
+import { AdministratorModel, PatientModel, ThethModel } from "@/models";
 import { applyPagination } from "@/utils/applyPagination";
-import { DeleteOutline, EditOutlined } from "@mui/icons-material";
+import { DeleteOutline, EditOutlined, KeyboardArrowDownOutlined, KeyboardArrowUpOutlined } from "@mui/icons-material";
 import { Checkbox, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import React, { useCallback } from "react";
 import { useEffect, useState } from "react";
+import { TreatmentTable } from ".";
 
 interface tableProps {
   handleEdit?: (patient: PatientModel) => void;
@@ -26,9 +28,11 @@ export const PatientTable = (props: tableProps) => {
   const { patients = [], getPatients, deletePatient } = usePatientStore();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(limitInit);
-  const [userList, setUserList] = useState<PatientModel[]>([]);
+  const [patientList, setPatientList] = useState<PatientModel[]>([]);
   const [query, setQuery] = useState<string>('');
 
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const [opendrawer, setOpendrawer] = useState<any>({ state: false, items: [] });
   useEffect(() => {
     getPatients()
   }, []);
@@ -42,9 +46,12 @@ export const PatientTable = (props: tableProps) => {
       page,
       rowsPerPage
     );
-    setUserList(newList)
+    setPatientList(newList)
   }, [patients, page, rowsPerPage, query])
 
+  const handleTheths = useCallback((state: boolean, items: ThethModel[]) => {
+    setOpendrawer({ state, items })
+  }, []);
 
   return (
     <Stack sx={{ paddingRight: '10px' }}>
@@ -53,7 +60,7 @@ export const PatientTable = (props: tableProps) => {
         search={setQuery}
       />
       <TableContainer>
-        <Table sx={{ minWidth: 350 }} size="small">
+        <Table size="small">
           <TableHead>
             <TableRow sx={{ backgroundColor: '#E2F6F0' }}>
               <TableCell sx={{ fontWeight: 'bold' }}>Carnet</TableCell>
@@ -67,41 +74,57 @@ export const PatientTable = (props: tableProps) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {userList.map((patient: PatientModel) => {
+            {patientList.map((patient: PatientModel) => {
               const isSelected = items.includes(patient.id);
               return (
-                <TableRow key={patient.id} >
-                  {
-                    stateSelect && <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isSelected}
-                        onChange={() => itemSelect!(patient)}
-                      />
-                    </TableCell>
-                  }
-                  <TableCell>{patient.user.identityCard}</TableCell>
-                  <TableCell>{patient.user.name}</TableCell>
-                  <TableCell>{patient.user.lastName}</TableCell>
-                  <TableCell>{patient.user.phone}</TableCell>
-                  <TableCell>{patient.allergies}</TableCell>
-                  <TableCell>{patient.bloodType}</TableCell>
-                  {
-                    !stateSelect && <TableCell align="right">
-                      <Stack
-                        alignItems="center"
-                        direction="row"
-                        spacing={2}
+                <React.Fragment key={patient.id} >
+                  <TableRow >
+                    {
+                      stateSelect && <TableCell padding="checkbox">
+                        <Checkbox
+                          checked={isSelected}
+                          onChange={() => itemSelect!(patient)}
+                        />
+                      </TableCell>
+                    }
+                    <TableCell>{patient.user.identityCard}</TableCell>
+                    <TableCell>{patient.user.name}</TableCell>
+                    <TableCell>{patient.user.lastName}</TableCell>
+                    <TableCell>{patient.user.phone}</TableCell>
+                    <TableCell>{patient.allergies}</TableCell>
+                    <TableCell>{patient.bloodType}</TableCell>
+                    <TableCell>
+                      <IconButton
+                        aria-label="expand row"
+                        size="small"
+                        onClick={() => setOpenIndex(openIndex == patient.id ? null : patient.id)}
                       >
-                        <IconButton onClick={() => handleEdit!(patient)} >
-                          <EditOutlined color="info" />
-                        </IconButton>
-                        <IconButton onClick={() => deletePatient(patient.id)} >
-                          <DeleteOutline color="error" />
-                        </IconButton>
-                      </Stack>
+                        {openIndex == patient.id ? <KeyboardArrowUpOutlined /> : <KeyboardArrowDownOutlined />}
+                      </IconButton>
                     </TableCell>
-                  }
-                </TableRow>
+                    {
+                      !stateSelect && <TableCell align="right">
+                        <Stack
+                          alignItems="center"
+                          direction="row"
+                          spacing={2}
+                        >
+                          <IconButton onClick={() => handleEdit!(patient)} >
+                            <EditOutlined color="info" />
+                          </IconButton>
+                          <IconButton onClick={() => deletePatient(patient.id)} >
+                            <DeleteOutline color="error" />
+                          </IconButton>
+                        </Stack>
+                      </TableCell>
+                    }
+                  </TableRow>
+                  <TreatmentTable
+                    open={openIndex == patient.id}
+                    treatments={patient.treatmentsIds}
+                    onViewTheths={(items) => handleTheths(true, items)}
+                  />
+                </React.Fragment>
               );
             })}
           </TableBody>
@@ -114,6 +137,15 @@ export const PatientTable = (props: tableProps) => {
         page={page}
         limit={rowsPerPage}
       />
-    </Stack>
+      {
+        <ShowTable
+          open={opendrawer.state}
+          handleClose={() => handleTheths(false, [])}
+          title="Dientes"
+          headers={['#', 'Nombre', 'Modulo']}
+          data={opendrawer.items}
+        />
+      }
+    </Stack >
   );
 }

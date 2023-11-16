@@ -1,6 +1,6 @@
 import { ComponentDate, ComponentInput } from "@/components"
 import { useForm, usePatientStore } from "@/hooks";
-import { FormPatientModel, FormPatientValidations } from "@/models";
+import { FormTreatmentValidations, FormTreatmenttModel, PatientModel, StageTypeModel, ThethModel } from "@/models";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from "@mui/material"
 import { FormEvent, useState } from "react";
 
@@ -10,29 +10,25 @@ interface createProps {
   item: any;
 }
 
-const formFields: FormPatientModel = {
-  identityCard: 0,
-  name: '',
-  lastName: '',
-  phone: 0,
-  birthDate: null,
-  gender: '',
-  allergies: '',
-  bloodType: '',
+const formFields: FormTreatmenttModel = {
+  stageTypeId: null,
+  patientId: null,
+  description: '',
+  date: null,
+  totalAmount: 0,
+  thethIds: [],
 }
 
-const formValidations: FormPatientValidations = {
-  identityCard: [(value: number) => value != 0, 'Debe ingresar el numero de carnet'],
-  name: [(value: string) => value.length >= 1, 'Debe ingresar el nombre'],
-  lastName: [(value: string) => value.length >= 1, 'Debe ingresar el apellido'],
-  phone: [(value: number) => value != 0, 'Debe ingresar el numero de telefono'],
-  birthDate: [(value: Date) => value != null, 'Debe ingresar la fecha de nacimiento'],
-  gender: [(value: string) => value.length >= 1, 'Debe ingresar el genero'],
-  allergies: [(value: string) => value.length >= 1, 'Debe ingresar la alergia'],
-  bloodType: [(value: string) => value.length >= 1, 'Debe ingresar tipo de sangre'],
+const formValidations: FormTreatmentValidations = {
+  stageTypeId: [(value: any) => value != null, 'Debe ingresar el numero de carnet'],
+  patientId: [(value: any) => value != 1, 'Debe ingresar el nombre'],
+  description: [(value: string) => value.length >= 1, 'Debe ingresar el apellido'],
+  date: [(value: Date) => value != null, 'Debe ingresar la fecha de nacimiento'],
+  totalAmount: [(value: number) => value != 0, 'Debe ingresar el genero'],
+  thethIds: [(value: ThethModel[]) => value.length >= 1, 'Debe ingresar la alergia'],
 }
 
-export const CreatePatient = (props: createProps) => {
+export const CreateTreatment = (props: createProps) => {
   const {
     open,
     handleClose,
@@ -83,7 +79,7 @@ export const CreatePatient = (props: createProps) => {
   return (
     <>
       <Dialog open={open} onClose={handleClose} >
-        <DialogTitle>{item == null ? 'Nuevo Paciente' : `${item.name}`}</DialogTitle>
+        <DialogTitle>{item == null ? 'Nuevo Tratamiento' : `${item.name}`}</DialogTitle>
         <form onSubmit={sendSubmit}>
           <DialogContent sx={{ display: 'flex' }}>
             <Grid container>

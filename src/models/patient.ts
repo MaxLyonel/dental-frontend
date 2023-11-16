@@ -1,4 +1,4 @@
-import { RoleModel, TreatmentModel, UserModel } from ".";
+import { TreatmentModel, UserModel } from ".";
 
 
 export interface PatientModel {
@@ -6,7 +6,7 @@ export interface PatientModel {
   allergies: string;
   bloodType: string;
   user: UserModel;
-  treatments: TreatmentModel;
+  treatmentsIds: TreatmentModel[];
 }
 
 /* FORM */
@@ -17,7 +17,8 @@ export interface FormPatientModel {
   phone: number;
   birthDate: Date | null;
   gender: string;
-  roleId: RoleModel | null;
+  allergies: string;
+  bloodType: string;
 }
 
 /*VALIDATIONS */
@@ -28,5 +29,6 @@ export interface FormPatientValidations {
   phone: [(value: number) => boolean, string];
   birthDate: [(value: Date) => boolean, string];
   gender: [(value: string) => boolean, string];
-  roleId: [(value: RoleModel) => boolean, string];
+  allergies: [(value: string) => boolean, string];
+  bloodType: [(value: string) => boolean, string];
 }

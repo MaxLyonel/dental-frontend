@@ -9,6 +9,7 @@ import { PermissionView } from '@/views/admin/permission';
 import { RoleView } from '@/views/admin/role';
 import { AdministratorView } from '@/views/admin/administrator';
 import { PatientView } from '@/views/admin/patient';
+import { CalendarView } from '@/views/admin/calendar';
 
 export const AppRouter = () => {
 
@@ -28,11 +29,7 @@ export const AppRouter = () => {
                     <Route path='/rolesView' element={<RoleView />} />
                     <Route path='/administratorView' element={<AdministratorView />} />
                     <Route path='/patientView' element={<PatientView />} />
-                    {/* <Route path='/customerCreditsView' element={<CustomerCreditsView />} /> */}
-                    {/* <Route path='/productsView' element={<ProductsView />} /> */}
-                    {/* <Route path='/movementsView' element={<MovementsView />} /> */}
-                    {/* <Route path='/salesView' element={<SalesView />} /> */}
-                    {/* <Route path='/orderView' element={<OrderView />} /> */}
+                    <Route path='/calendarView' element={<CalendarView />} />
 
                     {/*  */}
                     <Route path="/*" element={<Navigate to={"/dashboardView"} />} />
