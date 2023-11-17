@@ -144,7 +144,7 @@ export const SideNav = (props: navProps) => {
         variant="permanent"
         PaperProps={{
           sx: {
-            backgroundColor: '#1E635A',
+            backgroundColor: '#04aab0',
             color: 'white',
             boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.2)',
             width: 200
@@ -163,7 +163,7 @@ export const SideNav = (props: navProps) => {
       open={open}
       PaperProps={{
         sx: {
-          backgroundColor: '#1E635A',
+          backgroundColor: '#04aab0',
           color: 'white',
           width: 190
         }

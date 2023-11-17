@@ -7,7 +7,6 @@ export const permissionSlice = createSlice({
         permissions: [] as PermissionModel[],
     },
     reducers: {
-        //permisions
         setPermissions: (state, action) => {
             state.permissions = action.payload.permissions;
         },

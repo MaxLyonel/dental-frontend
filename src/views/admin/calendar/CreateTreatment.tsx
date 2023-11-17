@@ -1,8 +1,11 @@
-import { ComponentDate, ComponentInput } from "@/components"
-import { useForm, usePatientStore } from "@/hooks";
-import { FormTreatmentValidations, FormTreatmenttModel, PatientModel, StageTypeModel, ThethModel } from "@/models";
+import { ComponentDate, ComponentInput, ComponentSelect, ModalSelectComponent } from "@/components"
+import { useForm, useTreatmentStore } from "@/hooks";
+import { FormTreatmentValidations, FormTreatmenttModel, ThethModel } from "@/models";
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid } from "@mui/material"
-import { FormEvent, useState } from "react";
+import { FormEvent, useCallback, useState } from "react";
+import { StageTypeTable } from "../stageType";
+import { PatientTable } from "../patient";
+import { ThethTable } from "../theth";
 
 interface createProps {
   open: boolean;
@@ -34,13 +37,13 @@ export const CreateTreatment = (props: createProps) => {
     handleClose,
     item,
   } = props;
-  const { postCreatePatient, putUpdatePatient } = usePatientStore();
+  const { postCreateTreatment, putUpdateTreatment } = useTreatmentStore();
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const {
-    identityCard, name, lastName, phone, birthDate, gender, allergies, bloodType,
+    stageTypeId, patientId, description, date, totalAmount, thethIds,
     onInputChange, isFormValid, onResetForm, onValueChange,
-    identityCardValid, nameValid, lastNameValid, phoneValid, birthDateValid, genderValid, allergiesValid, bloodTypeValid,
+    stageTypeIdValid, patientIdValid, descriptionValid, dateValid, totalAmountValid, thethIdsValid,
   } = useForm(item ?? formFields, formValidations);
 
   const sendSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -48,125 +51,177 @@ export const CreateTreatment = (props: createProps) => {
     setFormSubmitted(true);
     if (!isFormValid) return;
     if (item == null) {
-      postCreatePatient(
+      postCreateTreatment(
         {
-          identityCard: parseInt(identityCard),
-          name: name.trim(),
-          lastName: lastName.trim(),
-          phone: parseInt(phone),
-          birthDate: birthDate,
-          gender: gender,
-          allergies: allergies,
-          bloodType: bloodType,
+          stageTypeId: stageTypeId.id,
+          patientId: patientId.id,
+          description: description.trim(),
+          date: date,
+          totalAmount: parseFloat(totalAmount),
+          thethIds: thethIds.map((theth: ThethModel) => theth.id),
         });
     } else {
-      putUpdatePatient(item.patientId,
+      putUpdateTreatment(item.treatmentId,
         {
-          identityCard: identityCard,
-          name: name.trim(),
-          lastName: lastName.trim(),
-          phone: phone,
-          birthDate: birthDate,
-          gender: gender,
-          allergies: allergies,
-          bloodType: bloodType,
+          // identityCard: identityCard,
+          // name: name.trim(),
+          // lastName: lastName.trim(),
+          // phone: phone,
+          // birthDate: birthDate,
+          // gender: gender,
+          // allergies: allergies,
+          // bloodType: bloodType,
         });
     }
     handleClose();
     onResetForm();
   }
-
+  // stage type
+  const [modalStageType, setModalStageType] = useState(false);
+  const handleModalStageType = useCallback((value: boolean) => {
+    setModalStageType(value);
+  }, []);
+  // patient
+  const [modalPatient, setModalPatient] = useState(false);
+  const handleModalPatient = useCallback((value: boolean) => {
+    setModalPatient(value);
+  }, []);
+  //theth
+  const [modalTheth, setModalTheth] = useState(false);
+  const handleModalTheth = useCallback((value: boolean) => {
+    setModalTheth(value);
+  }, []);
   return (
     <>
+      {
+        modalStageType &&
+        <ModalSelectComponent
+          stateSelect={true}
+          stateMultiple={false}
+          title='etapas:'
+          opendrawer={modalStageType}
+          handleDrawer={handleModalStageType}
+        >
+          <StageTypeTable
+            stateSelect={true}
+            limitInit={5}
+            itemSelect={(v) => {
+              if (stageTypeId == null || stageTypeId.id != v.id) {
+                onValueChange('stageTypeId', v)
+                handleModalStageType(false)
+              }
+            }}
+            items={stageTypeId == null ? [] : [stageTypeId.id]}
+          />
+        </ModalSelectComponent>
+      }
+      {
+        modalPatient &&
+        <ModalSelectComponent
+          stateSelect={true}
+          stateMultiple={false}
+          title='pacientes:'
+          opendrawer={modalPatient}
+          handleDrawer={handleModalPatient}
+        >
+          <PatientTable
+            stateSelect={true}
+            limitInit={5}
+            itemSelect={(v) => {
+              if (patientId == null || patientId.id != v.id) {
+                onValueChange('patientId', v)
+                handleModalPatient(false)
+              }
+            }}
+            items={patientId == null ? [] : [patientId.id]}
+          />
+        </ModalSelectComponent>
+      }
+      {
+        modalTheth &&
+        <ModalSelectComponent
+          stateSelect={true}
+          stateMultiple={true}
+          title='Dientes:'
+          opendrawer={modalTheth}
+          handleDrawer={handleModalTheth}
+        >
+          <ThethTable
+            stateSelect={true}
+            itemSelect={(v) => {
+              if (thethIds.map((e: ThethModel) => e.id).includes(v.id)) {
+                onValueChange('thethIds', [...thethIds.filter((e: ThethModel) => e.id != v.id)])
+              } else {
+                onValueChange('thethIds', [...thethIds, v])
+              }
+            }}
+            items={thethIds.map((e: ThethModel) => (e.id))}
+          />
+        </ModalSelectComponent>
+      }
       <Dialog open={open} onClose={handleClose} >
         <DialogTitle>{item == null ? 'Nuevo Tratamiento' : `${item.name}`}</DialogTitle>
         <form onSubmit={sendSubmit}>
           <DialogContent sx={{ display: 'flex' }}>
             <Grid container>
-              <Grid item xs={12} sm={4} sx={{ padding: '5px' }}>
-                <ComponentInput
-                  type="text"
-                  label="Carnet de Identidad"
-                  name="identityCard"
-                  value={identityCard}
-                  onChange={onInputChange}
-                  error={!!identityCardValid && formSubmitted}
-                  helperText={formSubmitted ? identityCardValid : ''}
+              <Grid item xs={12} sm={6} sx={{ padding: '5px' }}>
+                <ComponentSelect
+                  label={stageTypeId != null ? 'Etapa' : ''}
+                  title={stageTypeId != null ? stageTypeId.name : 'Etapa'}
+                  onPressed={() => handleModalStageType(true)}
+                  error={!!stageTypeIdValid && formSubmitted}
+                  helperText={formSubmitted ? stageTypeIdValid : ''}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} sx={{ padding: '5px' }}>
+                <ComponentSelect
+                  label={patientId != null ? 'Paciente' : ''}
+                  title={patientId != null ? patientId.user.name : 'Paciente'}
+                  onPressed={() => handleModalPatient(true)}
+                  error={!!patientIdValid && formSubmitted}
+                  helperText={formSubmitted ? patientIdValid : ''}
                 />
               </Grid>
               <Grid item xs={12} sm={4} sx={{ padding: '5px' }}>
                 <ComponentInput
                   type="text"
-                  label="Nombre"
-                  name="name"
-                  value={name}
+                  label="Descripción"
+                  name="description"
+                  value={description}
                   onChange={onInputChange}
-                  error={!!nameValid && formSubmitted}
-                  helperText={formSubmitted ? nameValid : ''}
-                />
-              </Grid>
-              <Grid item xs={12} sm={4} sx={{ padding: '5px' }}>
-                <ComponentInput
-                  type="text"
-                  label="Apellido"
-                  name="lastName"
-                  value={lastName}
-                  onChange={onInputChange}
-                  error={!!lastNameValid && formSubmitted}
-                  helperText={formSubmitted ? lastNameValid : ''}
-                />
-              </Grid>
-              <Grid item xs={12} sm={4} sx={{ padding: '5px' }}>
-                <ComponentInput
-                  type="text"
-                  label="Genero"
-                  name="gender"
-                  value={gender}
-                  onChange={onInputChange}
-                  error={!!genderValid && formSubmitted}
-                  helperText={formSubmitted ? genderValid : ''}
-                />
-              </Grid>
-              <Grid item xs={12} sm={4} sx={{ padding: '5px' }}>
-                <ComponentInput
-                  type="text"
-                  label="Telefono"
-                  name="phone"
-                  value={phone}
-                  onChange={onInputChange}
-                  error={!!phoneValid && formSubmitted}
-                  helperText={formSubmitted ? phoneValid : ''}
+                  error={!!descriptionValid && formSubmitted}
+                  helperText={formSubmitted ? descriptionValid : ''}
                 />
               </Grid>
               <Grid item xs={12} sm={4} sx={{ padding: '5px' }}>
                 <ComponentDate
-                  title="Fecha de nacimiento"
-                  date={birthDate}
-                  onChange={(date) => onValueChange('birthDate', date)}
-                  error={!!birthDateValid && formSubmitted}
-                  helperText={formSubmitted ? birthDateValid : ''}
+                  title="Fecha"
+                  date={date}
+                  onChange={(date) => onValueChange('date', date)}
+                  error={!!dateValid && formSubmitted}
+                  helperText={formSubmitted ? dateValid : ''}
                 />
               </Grid>
               <Grid item xs={12} sm={4} sx={{ padding: '5px' }}>
                 <ComponentInput
                   type="text"
-                  label="Alergias"
-                  name="allergies"
-                  value={allergies}
+                  label="Monto total"
+                  name="totalAmount"
+                  value={totalAmount}
                   onChange={onInputChange}
-                  error={!!allergiesValid && formSubmitted}
-                  helperText={formSubmitted ? allergiesValid : ''}
+                  error={!!totalAmountValid && formSubmitted}
+                  helperText={formSubmitted ? totalAmountValid : ''}
                 />
               </Grid>
-              <Grid item xs={12} sm={4} sx={{ padding: '5px' }}>
-                <ComponentInput
-                  type="text"
-                  label="Tipo de sangre"
-                  name="bloodType"
-                  value={bloodType}
-                  onChange={onInputChange}
-                  error={!!bloodTypeValid && formSubmitted}
-                  helperText={formSubmitted ? bloodTypeValid : ''}
+              <Grid item xs={12} sm={12} sx={{ padding: '5px' }}>
+                <ComponentSelect
+                  label={thethIds != null ? '' : 'Dientes'}
+                  title={'Dientes'}
+                  onPressed={() => handleModalTheth(true)}
+                  error={!!thethIdsValid && formSubmitted}
+                  helperText={formSubmitted ? thethIdsValid : ''}
+                  items={thethIds.map((e: ThethModel) => ({ id: e.id, name: e.name }))}
+                  onRemove={(v) => onValueChange('thethIds', [...thethIds.filter((e: ThethModel) => e.id != v)])}
                 />
               </Grid>
             </Grid>
