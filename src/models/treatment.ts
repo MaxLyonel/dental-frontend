@@ -1,4 +1,4 @@
-import { PatientModel, StageTypeModel, ThethModel } from ".";
+import { PatientModel, PaymentModel, StageTypeModel, ThethModel } from ".";
 
 export interface TreatmentModel {
   id: number;
@@ -7,6 +7,8 @@ export interface TreatmentModel {
   totalAmount: number;
   state: string;
   stageType: StageTypeModel;
+  patient: PatientModel;
+  payments: PaymentModel[];
   thethIds: ThethModel[];
 }
 

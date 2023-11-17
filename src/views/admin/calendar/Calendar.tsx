@@ -71,7 +71,7 @@ export const CalendarComponent = (props: calendarProps) => {
         <TreatmentDialog
           open={openDialog}
           handleClose={() => handleDialog(false)}
-          item={itemSelect}
+          treatmentId={itemSelect.id}
         />
       }
     </>

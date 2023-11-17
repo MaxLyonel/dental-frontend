@@ -10,3 +10,4 @@ export * from './usePatientStore';
 export * from './useTreatmentStore';
 export * from './useStageTypeStore';
 export * from './useThethStore';
+export * from './usePaymentStore';

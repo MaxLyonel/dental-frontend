@@ -6,3 +6,4 @@ export * from './patient';
 export * from './treatment';
 export * from './stageType';
 export * from './theth';
+export * from './payment';
