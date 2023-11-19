@@ -1,14 +1,17 @@
 import { ComponentButton } from "@/components"
 import { Stack, SvgIcon } from "@mui/material"
 import { useCallback, useEffect, useState } from "react";
-import { CalendarComponent, CreateTreatment } from ".";
+import { CalendarComponent } from ".";
 import { Add } from "@mui/icons-material";
-import { PatientModel } from "@/models";
+import { PatientModel, PermissionModel } from "@/models";
+import { useAuthStore } from "@/hooks";
+import { CreateTreatment } from "../treatment";
 
 export const CalendarView = () => {
   const [openDialog, setopenDialog] = useState(false);
   const [itemEdit, setItemEdit] = useState<PatientModel | null>(null);
   const [screenHeight, setScreenHeight] = useState(window.innerHeight);
+  const { roleUser } = useAuthStore();
   /*CONTROLADOR DEL DIALOG PARA CREAR O EDITAR */
   const handleDialog = useCallback((value: boolean) => {
     if (!value) setItemEdit(null)
@@ -34,7 +37,9 @@ export const CalendarView = () => {
         <ComponentButton
           text="Nuevo tratamiento"
           onClick={() => handleDialog(true)}
-          startIcon={<SvgIcon fontSize="small"><Add /></SvgIcon>} />
+          startIcon={<SvgIcon fontSize="small"><Add /></SvgIcon>}
+          disable={!roleUser.permissions.find((permission: PermissionModel) => permission.name === "crear tratamiento")}
+        />
       </Stack>
       <CalendarComponent
         screenHeight={screenHeight}

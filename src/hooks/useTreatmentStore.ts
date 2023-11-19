@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { coffeApi } from '@/services';
-import { setTreatments, setAddTreatment, setUpdateTreatment, setDeleteTreatment } from '@/store';
+import { setTreatments, setAddTreatment, setUpdateTreatment, setUpdatePatient } from '@/store';
 import Swal from 'sweetalert2';
 
 export const useTreatmentStore = () => {
@@ -29,11 +29,11 @@ export const useTreatmentStore = () => {
 
   const putUpdateTreatment = async (id: number, body: object) => {
     try {
-      console.log('MODIFICANDO PACIENTE')
+      console.log('MODIFICANDO TRATAMIENTO')
       const { data } = await coffeApi.put(`/treatment/${id}`, body);
       console.log(data)
-      dispatch(setUpdateTreatment({ treatment: data.treatment }));
-      Swal.fire('Se modifico el paciente', '', 'success');
+      dispatch(setUpdatePatient({ patient: data.patient }));
+      Swal.fire('Se modifico el tratamiento', '', 'success');
     } catch (error: any) {
       Swal.fire('Oops ocurrio algo', error.response.data.msg, 'error');
     }
@@ -55,10 +55,10 @@ export const useTreatmentStore = () => {
           console.log('ELIMINANDO PACIENTE')
           const { data } = await coffeApi.delete(`/treatment/${id}`);
           console.log(data)
-          dispatch(setDeleteTreatment({ id }));
+          dispatch(setUpdatePatient({ patient: data.patient }));
           Swal.fire(
             'Eliminado',
-            'Usuario eliminado correctamente',
+            'Tratamiento eliminado correctamente',
             'success'
           )
         } else {

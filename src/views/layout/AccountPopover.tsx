@@ -3,11 +3,11 @@ import { Box, Divider, MenuItem, MenuList, Popover, Typography } from '@mui/mate
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/hooks';
 
-export const AccountPopover = ({ anchorEl, onClose, open, onTapSettings }: { anchorEl: any, onClose: any, open: boolean, onTapSettings: any }) => {
+export const AccountPopover = ({ anchorEl, onClose, open }: { anchorEl: any, onClose: any, open: boolean }) => {
 
   const navigate = useNavigate();
   const { startLogout } = useAuthStore();
-  const { user } = useAuthStore();
+  const { user, roleUser } = useAuthStore();
 
   return (
     <Popover
@@ -32,6 +32,12 @@ export const AccountPopover = ({ anchorEl, onClose, open, onTapSettings }: { anc
           color="text.secondary"
           variant="body2"
         >
+          {roleUser.name}
+        </Typography>
+        <Typography
+          color="text.secondary"
+          variant="body2"
+        >
           {user}
         </Typography>
       </Box>
@@ -46,11 +52,6 @@ export const AccountPopover = ({ anchorEl, onClose, open, onTapSettings }: { anc
           }
         }}
       >
-        <MenuItem
-          onClick={() => onTapSettings()}
-        >
-          Configuraciones
-        </MenuItem>
         <MenuItem
           onClick={() => {
             startLogout();

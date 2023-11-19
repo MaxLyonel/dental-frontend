@@ -23,15 +23,12 @@ export const treatmentSlice = createSlice({
         return e
       })];
     },
-    setDeleteTreatment: (state, action) => {
-      state.treatments = [...state.treatments.filter(e => e.id != action.payload.id)];
-    },
-    //corregir
     setRegisterPayment: (state, action) => {
       state.treatments = [...state.treatments.map((treatment: TreatmentModel) => {
         if (treatment.id === action.payload.payment.treatmentId) {
           return ({
             ...treatment,
+            amountDue: action.payload.amountDue,
             payments: [...treatment.payments, action.payload.payment]
           })
         }
@@ -43,4 +40,4 @@ export const treatmentSlice = createSlice({
 
 
 // Action creators are generated for each case reducer function
-export const { setTreatments, setAddTreatment, setUpdateTreatment, setDeleteTreatment, setRegisterPayment } = treatmentSlice.actions;
+export const { setTreatments, setAddTreatment, setUpdateTreatment, setRegisterPayment } = treatmentSlice.actions;

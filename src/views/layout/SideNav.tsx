@@ -111,7 +111,8 @@ export const SideNav = (props: navProps) => {
                     {item.title}
                   </Typography>
                   {
-                    item.group!.map((e) => {
+                    item.group!.map((e: any) => {
+                      console.log(e)
                       const active = e.path ? (pathname === e.path) : false;
                       return (
                         <SideNavItem

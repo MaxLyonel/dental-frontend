@@ -47,6 +47,7 @@ export const CreateTreatment = (props: createProps) => {
   } = useForm(item ?? formFields, formValidations);
 
   const sendSubmit = (event: FormEvent<HTMLFormElement>) => {
+    console.log(item)
     event.preventDefault();
     setFormSubmitted(true);
     if (!isFormValid) return;
@@ -63,14 +64,12 @@ export const CreateTreatment = (props: createProps) => {
     } else {
       putUpdateTreatment(item.treatmentId,
         {
-          // identityCard: identityCard,
-          // name: name.trim(),
-          // lastName: lastName.trim(),
-          // phone: phone,
-          // birthDate: birthDate,
-          // gender: gender,
-          // allergies: allergies,
-          // bloodType: bloodType,
+          stageTypeId: stageTypeId.id,
+          patientId: patientId.id,
+          description: description.trim(),
+          date: date,
+          totalAmount: parseFloat(totalAmount),
+          thethIds: thethIds.map((theth: ThethModel) => theth.id),
         });
     }
     handleClose();
@@ -160,7 +159,7 @@ export const CreateTreatment = (props: createProps) => {
         </ModalSelectComponent>
       }
       <Dialog open={open} onClose={handleClose} >
-        <DialogTitle>{item == null ? 'Nuevo Tratamiento' : `${item.name}`}</DialogTitle>
+        <DialogTitle>{item == null ? 'Nuevo Tratamiento' : `${item.description}`}</DialogTitle>
         <form onSubmit={sendSubmit}>
           <DialogContent sx={{ display: 'flex' }}>
             <Grid container>

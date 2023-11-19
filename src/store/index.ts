@@ -6,5 +6,6 @@ export * from './patient/patientSlice';
 export * from './treatment/treatmentSlice';
 export * from './stageType/stageTypeSlice';
 export * from './theth/thethSlice';
+export * from './report/reportSlice';
 
 export * from './store';

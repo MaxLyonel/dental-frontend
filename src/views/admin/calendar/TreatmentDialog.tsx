@@ -1,10 +1,10 @@
 import { ComponentButton } from "@/components";
-import { PaymentModel, ThethModel, TreatmentModel } from "@/models";
+import { PaymentModel, PermissionModel, ThethModel, TreatmentModel } from "@/models";
 import { Payment } from "@mui/icons-material";
 import { Dialog, DialogContent, DialogTitle, Stack, SvgIcon, Table, TableBody, TableCell, TableHead, TableRow, Typography } from "@mui/material"
 import { useEffect, useState } from "react";
 import { FormPayment } from ".";
-import { useTreatmentStore } from "@/hooks";
+import { useAuthStore, useTreatmentStore } from "@/hooks";
 
 interface dialogProps {
   open: boolean;
@@ -21,6 +21,7 @@ export const TreatmentDialog = (props: dialogProps) => {
   const { treatments = [] } = useTreatmentStore();
   const [modal, setModal] = useState(false);
   const [treatment, setTreatment] = useState<TreatmentModel>()
+  const { roleUser } = useAuthStore();
   const handleModal = (value: boolean) => {
     setModal(value);
   };
@@ -78,12 +79,14 @@ export const TreatmentDialog = (props: dialogProps) => {
             justifyContent="space-between"
           >
             <Typography variant="subtitle1">
-              {`Monto total: ${treatment.totalAmount} Bs`}
+              {`Monto adeudado: ${treatment.amountDue} Bs`}
             </Typography>
             <ComponentButton
               text="Registrar pago"
               onClick={() => handleModal(true)}
-              startIcon={<SvgIcon fontSize="small"><Payment /></SvgIcon>} />
+              startIcon={<SvgIcon fontSize="small"><Payment /></SvgIcon>}
+              disable={treatment.amountDue <= 0 && !roleUser.permissions.find((permission: PermissionModel) => permission.name === "efectuar pago")}
+            />
           </Stack>
           {treatment.payments.length > 0 && <Table sx={{ minWidth: 350 }} size="small">
             <TableHead>
@@ -109,7 +112,7 @@ export const TreatmentDialog = (props: dialogProps) => {
         modal && treatment &&
         <FormPayment
           treatmentId={treatmentId}
-          amountTotal={treatment.totalAmount}
+          amountTotal={treatment.amountDue}
           open={modal}
           handleClose={() => handleModal(false)}
         />

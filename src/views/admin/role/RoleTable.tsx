@@ -1,5 +1,5 @@
 import { ComponentSearch, ComponentTablePagination, SeverityPill } from "@/components";
-import { useRoleStore } from "@/hooks";
+import { useAuthStore, useRoleStore } from "@/hooks";
 import { PermissionModel, RoleModel } from "@/models";
 import { applyPagination } from "@/utils/applyPagination";
 import { DeleteOutline, EditOutlined, RemoveRedEyeOutlined } from "@mui/icons-material";
@@ -31,7 +31,7 @@ export const RoleTable = (props: tableProps) => {
   const [rowsPerPage, setRowsPerPage] = useState(limitInit);
   const [roleList, setRoleList] = useState<RoleModel[]>([]);
   const [query, setQuery] = useState<string>('');
-
+  const { roleUser } = useAuthStore();
 
   useEffect(() => {
     getRoles()
@@ -103,10 +103,16 @@ export const RoleTable = (props: tableProps) => {
                         direction="row"
                         spacing={2}
                       >
-                        <IconButton onClick={() => handleEdit!(role)} >
+                        <IconButton
+                          onClick={() => handleEdit!(role)}
+                          disabled={!roleUser.permissions.find((permission: PermissionModel) => permission.name === "editar roles")}
+                        >
                           <EditOutlined color="info" />
                         </IconButton>
-                        <IconButton onClick={() => deleteRole(role.id)} >
+                        <IconButton
+                          onClick={() => deleteRole(role.id)}
+                          disabled={!roleUser.permissions.find((permission: PermissionModel) => permission.name === "eliminar roles")}
+                        >
                           <DeleteOutline color="error" />
                         </IconButton>
                       </Stack>

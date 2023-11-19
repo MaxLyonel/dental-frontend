@@ -1,12 +1,12 @@
 import { ComponentSearch, ComponentTablePagination, ShowTable } from "@/components";
-import { usePatientStore } from "@/hooks";
-import { AdministratorModel, PatientModel, ThethModel } from "@/models";
+import { useAuthStore, usePatientStore } from "@/hooks";
+import { AdministratorModel, PatientModel, PermissionModel, ThethModel } from "@/models";
 import { applyPagination } from "@/utils/applyPagination";
 import { DeleteOutline, EditOutlined, KeyboardArrowDownOutlined, KeyboardArrowUpOutlined } from "@mui/icons-material";
 import { Checkbox, IconButton, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import React, { useCallback } from "react";
 import { useEffect, useState } from "react";
-import { TreatmentTable } from ".";
+import { TreatmentTable } from "../treatment";
 
 interface tableProps {
   handleEdit?: (patient: PatientModel) => void;
@@ -33,6 +33,7 @@ export const PatientTable = (props: tableProps) => {
 
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const [opendrawer, setOpendrawer] = useState<any>({ state: false, items: [] });
+  const { roleUser } = useAuthStore();
   useEffect(() => {
     getPatients()
   }, []);
@@ -109,10 +110,16 @@ export const PatientTable = (props: tableProps) => {
                           direction="row"
                           spacing={2}
                         >
-                          <IconButton onClick={() => handleEdit!(patient)} >
+                          <IconButton
+                            onClick={() => handleEdit!(patient)}
+                            disabled={!roleUser.permissions.find((permission: PermissionModel) => permission.name === "editar pacientes")}
+                          >
                             <EditOutlined color="info" />
                           </IconButton>
-                          <IconButton onClick={() => deletePatient(patient.id)} >
+                          <IconButton
+                            onClick={() => deletePatient(patient.id)}
+                            disabled={!roleUser.permissions.find((permission: PermissionModel) => permission.name === "eliminar pacientes")}
+                          >
                             <DeleteOutline color="error" />
                           </IconButton>
                         </Stack>
@@ -120,6 +127,7 @@ export const PatientTable = (props: tableProps) => {
                     }
                   </TableRow>
                   <TreatmentTable
+                    patient={patient}
                     open={openIndex == patient.id}
                     treatments={patient.treatmentsIds}
                     onViewTheths={(items) => handleTheths(true, items)}

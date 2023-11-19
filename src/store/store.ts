@@ -4,6 +4,7 @@ import {
     authSlice,
     patientSlice,
     permissionSlice,
+    reportSlice,
     roleSlice,
     stageTypeSlice,
     thethSlice,
@@ -22,6 +23,7 @@ export const store = configureStore({
         treatments: treatmentSlice.reducer,
         stageTypes: stageTypeSlice.reducer,
         theths: thethSlice.reducer,
+        reports: reportSlice.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: false

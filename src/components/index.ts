@@ -12,3 +12,5 @@ export * from './SelectPicker';
 export * from './ShowTable';
 export * from './Date';
 export * from './Input';
+export * from './Chart';
+export * from './DateRange';

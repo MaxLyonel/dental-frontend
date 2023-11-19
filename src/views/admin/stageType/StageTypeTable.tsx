@@ -46,7 +46,7 @@ export const StageTypeTable = (props: tableProps) => {
   return (
     <Stack sx={{ paddingRight: '10px' }}>
       <ComponentSearch
-        title="Buscar Permiso"
+        title="Buscar Etapa"
         search={setQuery}
       />
       <TableContainer>

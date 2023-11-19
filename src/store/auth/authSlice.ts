@@ -1,3 +1,4 @@
+import { RoleModel } from '@/models';
 import { createSlice } from '@reduxjs/toolkit';
 
 export const authSlice = createSlice({
@@ -5,6 +6,7 @@ export const authSlice = createSlice({
   initialState: {
     status: 'not-authenticated',
     user: {},
+    roleUser: null as RoleModel | null,
   },
   reducers: {
     onLogin: (state, { payload }) => {
@@ -15,9 +17,12 @@ export const authSlice = createSlice({
       state.status = 'not-authenticated';
       state.user = {};
     },
+    setRoleUser: (state, { payload }) => {
+      state.roleUser = payload.role;
+    }
   }
 });
 
 
 // Action creators are generated for each case reducer function
-export const { onLogin, onLogout } = authSlice.actions;
+export const { onLogin, onLogout, setRoleUser } = authSlice.actions;

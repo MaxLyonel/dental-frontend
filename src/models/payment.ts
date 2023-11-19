@@ -3,6 +3,7 @@ export interface PaymentModel {
   amount: number;
   discount: number;
   typeDiscount: string;
+  amountDue: number;
 }
 /* FORM */
 export interface FormPaymenttModel {

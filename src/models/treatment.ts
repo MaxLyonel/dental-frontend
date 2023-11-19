@@ -10,6 +10,7 @@ export interface TreatmentModel {
   patient: PatientModel;
   payments: PaymentModel[];
   thethIds: ThethModel[];
+  amountDue: number;
 }
 
 /* FORM */
