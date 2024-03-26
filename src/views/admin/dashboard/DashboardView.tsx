@@ -22,7 +22,7 @@ export const DashboardView = () => {
                 <OverviewCard
                   sx={{ height: '100%' }}
                   value={dashboard.countTreatments}
-                  title="Tratamientos"
+                  title="Eventos"
                 >
                   <Event />
                 </OverviewCard>
@@ -31,7 +31,7 @@ export const DashboardView = () => {
                 <OverviewCard
                   sx={{ height: '100%' }}
                   value={dashboard.countPatients}
-                  title="Pacientes"
+                  title="Ponentes"
                 >
                   <Person2Outlined />
                 </OverviewCard>

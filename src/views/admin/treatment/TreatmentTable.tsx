@@ -36,15 +36,14 @@ export const TreatmentTable = (props: tableProps) => {
       <TableRow style={{ backgroundColor: open ? '#E2F6F0' : '#f2f2f2' }}>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={12}>
           <Collapse in={open} timeout="auto" >
-            <Typography variant="h6">Tratamientos</Typography>
+            <Typography variant="h6">Eventos</Typography>
             <Table size="small">
               <TableHead>
                 <TableRow sx={{ backgroundColor: '#E2F6F0' }}>
                   <TableCell sx={{ fontWeight: 'bold' }}>Descripción</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }}>Fecha</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }}>Monto total</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Etapa</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Dientes</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>Souvenires</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }}>Estado</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }}>Acciones</TableCell>
                 </TableRow>
@@ -55,7 +54,6 @@ export const TreatmentTable = (props: tableProps) => {
                     <TableCell>{treatment.description}</TableCell>
                     <TableCell>{`${format(new Date(treatment.date), 'EEEE dd-MMMM-yyyy HH:mm', { locale: esES })}`}</TableCell>
                     <TableCell>{treatment.totalAmount}</TableCell>
-                    <TableCell>{treatment.stageType.name}</TableCell>
                     <TableCell>
                       <IconButton
                         onClick={() => onViewTheths!(treatment.thethIds)}
@@ -79,13 +77,13 @@ export const TreatmentTable = (props: tableProps) => {
                             setItemEdit(treatment)
                             handleDialog(true)
                           }}
-                          disabled={!roleUser.permissions.find((permission: PermissionModel) => permission.name === "editar tratamiento")}
+                          disabled={!roleUser.permissions.find((permission: PermissionModel) => permission.name === "editar evento")}
                         >
                           <EditOutlined color="info" />
                         </IconButton>
                         <IconButton
                           onClick={() => deleteTreatment(treatment.id)}
-                          disabled={treatment.state == "cancelado" || !roleUser.permissions.find((permission: PermissionModel) => permission.name === "eliminar tratamiento")}
+                          disabled={treatment.state == "cancelado" || !roleUser.permissions.find((permission: PermissionModel) => permission.name === "eliminar evento")}
                         >
                           <DeleteOutline color="error" />
                         </IconButton>

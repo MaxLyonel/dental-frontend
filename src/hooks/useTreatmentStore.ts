@@ -21,7 +21,7 @@ export const useTreatmentStore = () => {
       const { data } = await coffeApi.post(`/treatment`, body);
       console.log(data)
       dispatch(setAddTreatment({ treatment: data.treatment }));
-      Swal.fire('Tratamiento creado correctamente', '', 'success');
+      Swal.fire('Evento creado correctamente', '', 'success');
     } catch (error: any) {
       Swal.fire('Oops ocurrio algo', error.response.data.msg, 'error');
     }
@@ -33,7 +33,7 @@ export const useTreatmentStore = () => {
       const { data } = await coffeApi.put(`/treatment/${id}`, body);
       console.log(data)
       dispatch(setUpdatePatient({ patient: data.patient }));
-      Swal.fire('Se modifico el tratamiento', '', 'success');
+      Swal.fire('Se modifico el evento', '', 'success');
     } catch (error: any) {
       Swal.fire('Oops ocurrio algo', error.response.data.msg, 'error');
     }
@@ -58,13 +58,13 @@ export const useTreatmentStore = () => {
           dispatch(setUpdatePatient({ patient: data.patient }));
           Swal.fire(
             'Eliminado',
-            'Tratamiento eliminado correctamente',
+            'Evento eliminado correctamente',
             'success'
           )
         } else {
           Swal.fire(
             'Cancelado',
-            'Usuario esta a salvo :)',
+            'Evento esta a salvo :)',
             'error'
           )
         }

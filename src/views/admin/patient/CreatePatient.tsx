@@ -17,8 +17,6 @@ const formFields: FormPatientModel = {
   phone: 0,
   birthDate: null,
   gender: '',
-  allergies: '',
-  bloodType: '',
 }
 
 const formValidations: FormPatientValidations = {
@@ -28,8 +26,6 @@ const formValidations: FormPatientValidations = {
   phone: [(value: number) => value != 0, 'Debe ingresar el numero de telefono'],
   birthDate: [(value: Date) => value != null, 'Debe ingresar la fecha de nacimiento'],
   gender: [(value: string) => value.length >= 1, 'Debe ingresar el genero'],
-  allergies: [(value: string) => value.length >= 1, 'Debe ingresar la alergia'],
-  bloodType: [(value: string) => value.length >= 1, 'Debe ingresar tipo de sangre'],
 }
 
 export const CreatePatient = (props: createProps) => {
@@ -42,9 +38,9 @@ export const CreatePatient = (props: createProps) => {
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const {
-    identityCard, name, lastName, phone, birthDate, gender, allergies, bloodType,
+    identityCard, name, lastName, phone, birthDate, gender,
     onInputChange, isFormValid, onResetForm, onValueChange,
-    identityCardValid, nameValid, lastNameValid, phoneValid, birthDateValid, genderValid, allergiesValid, bloodTypeValid,
+    identityCardValid, nameValid, lastNameValid, phoneValid, birthDateValid, genderValid,
   } = useForm(item ?? formFields, formValidations);
 
   const sendSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -60,8 +56,8 @@ export const CreatePatient = (props: createProps) => {
           phone: parseInt(phone),
           birthDate: birthDate,
           gender: gender,
-          allergies: allergies,
-          bloodType: bloodType,
+          allergies: 'allergies',
+          bloodType: 'bloodType',
         });
     } else {
       putUpdatePatient(item.patientId,
@@ -72,8 +68,8 @@ export const CreatePatient = (props: createProps) => {
           phone: phone,
           birthDate: birthDate,
           gender: gender,
-          allergies: allergies,
-          bloodType: bloodType,
+          allergies: 'allergies',
+          bloodType: 'bloodType',
         });
     }
     handleClose();
@@ -83,7 +79,7 @@ export const CreatePatient = (props: createProps) => {
   return (
     <>
       <Dialog open={open} onClose={handleClose} >
-        <DialogTitle>{item == null ? 'Nuevo Paciente' : `${item.name}`}</DialogTitle>
+        <DialogTitle>{item == null ? 'Nuevo Ponente' : `${item.name}`}</DialogTitle>
         <form onSubmit={sendSubmit}>
           <DialogContent sx={{ display: 'flex' }}>
             <Grid container>
@@ -149,28 +145,6 @@ export const CreatePatient = (props: createProps) => {
                   onChange={(date) => onValueChange('birthDate', date)}
                   error={!!birthDateValid && formSubmitted}
                   helperText={formSubmitted ? birthDateValid : ''}
-                />
-              </Grid>
-              <Grid item xs={12} sm={4} sx={{ padding: '5px' }}>
-                <ComponentInput
-                  type="text"
-                  label="Alergias"
-                  name="allergies"
-                  value={allergies}
-                  onChange={onInputChange}
-                  error={!!allergiesValid && formSubmitted}
-                  helperText={formSubmitted ? allergiesValid : ''}
-                />
-              </Grid>
-              <Grid item xs={12} sm={4} sx={{ padding: '5px' }}>
-                <ComponentInput
-                  type="text"
-                  label="Tipo de sangre"
-                  name="bloodType"
-                  value={bloodType}
-                  onChange={onInputChange}
-                  error={!!bloodTypeValid && formSubmitted}
-                  helperText={formSubmitted ? bloodTypeValid : ''}
                 />
               </Grid>
             </Grid>

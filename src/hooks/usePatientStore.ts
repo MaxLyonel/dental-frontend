@@ -21,7 +21,7 @@ export const usePatientStore = () => {
       const { data } = await coffeApi.post(`/patient`, body);
       console.log(data)
       dispatch(setAddPatient({ patient: data.patient }));
-      Swal.fire('Paciente creado correctamente', '', 'success');
+      Swal.fire('Ponente creado correctamente', '', 'success');
     } catch (error: any) {
       Swal.fire('Oops ocurrio algo', error.response.data.msg, 'error');
     }
@@ -33,7 +33,7 @@ export const usePatientStore = () => {
       const { data } = await coffeApi.put(`/patient/${id}`, body);
       console.log(data)
       dispatch(setUpdatePatient({ patient: data.patient }));
-      Swal.fire('Se modifico el paciente', '', 'success');
+      Swal.fire('Se modifico el ponente', '', 'success');
     } catch (error: any) {
       Swal.fire('Oops ocurrio algo', error.response.data.msg, 'error');
     }

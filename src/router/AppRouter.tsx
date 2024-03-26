@@ -40,8 +40,7 @@ export const AppRouter = () => {
                         <Route path='/administratorView' element={<AdministratorView />} />
                     }
                     {
-                        roleUser.permissions.find((permission: PermissionModel) => permission.name === "ver pacientes") &&
-                        <Route path='/patientView' element={<PatientView />} />
+                         <Route path='/ponentView' element={<PatientView />} />
                     }
                     {
                         roleUser.permissions.find((permission: PermissionModel) => permission.name === "ver calendario") &&

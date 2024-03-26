@@ -64,7 +64,7 @@ export const OverviewCircle = () => {
   const totalPercentage = dashboard.treatmentDonut.series.reduce((sum: number, percentage: number) => sum + percentage, 0);
   return (
     <Card>
-      <CardHeader title="Tipos de tratamientos" />
+      <CardHeader title="Tipos de eventos" />
       <CardContent>
         <Chart
           options={chartOptions}

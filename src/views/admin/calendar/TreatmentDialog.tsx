@@ -52,28 +52,6 @@ export const TreatmentDialog = (props: dialogProps) => {
           <Typography variant="subtitle1">
             {`Contacto: ${treatment.patient.user.phone}`}
           </Typography>
-          <Typography variant="subtitle1">
-            {`Dientes:`}
-          </Typography>
-          {/* tabla de dientes */}
-          <Table sx={{ minWidth: 350 }} size="small">
-            <TableHead>
-              <TableRow sx={{ backgroundColor: '#E2F6F0' }}>
-                <TableCell sx={{ fontWeight: 'bold' }}>Nombre</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Descripción</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {treatment.thethIds.map((theth: ThethModel) => {
-                return (
-                  <TableRow key={theth.id} >
-                    <TableCell>{theth.name}</TableCell>
-                    <TableCell>{theth.description}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
           <Stack
             direction="row"
             justifyContent="space-between"

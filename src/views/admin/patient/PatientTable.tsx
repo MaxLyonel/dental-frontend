@@ -57,7 +57,7 @@ export const PatientTable = (props: tableProps) => {
   return (
     <Stack sx={{ paddingRight: '10px' }}>
       <ComponentSearch
-        title="Buscar Paciente"
+        title="Buscar Ponente"
         search={setQuery}
       />
       <TableContainer>
@@ -68,9 +68,7 @@ export const PatientTable = (props: tableProps) => {
               <TableCell sx={{ fontWeight: 'bold' }}>Nombre</TableCell>
               <TableCell sx={{ fontWeight: 'bold' }}>Apellido</TableCell>
               <TableCell sx={{ fontWeight: 'bold' }}>Telefono</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Alergias</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Tipo de Sangre</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Historial Medico</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Historial de eventos</TableCell>
               {!stateSelect && <TableCell sx={{ fontWeight: 'bold' }}>Acciones</TableCell>}
             </TableRow>
           </TableHead>
@@ -92,8 +90,6 @@ export const PatientTable = (props: tableProps) => {
                     <TableCell>{patient.user.name}</TableCell>
                     <TableCell>{patient.user.lastName}</TableCell>
                     <TableCell>{patient.user.phone}</TableCell>
-                    <TableCell>{patient.allergies}</TableCell>
-                    <TableCell>{patient.bloodType}</TableCell>
                     <TableCell>
                       <IconButton
                         aria-label="expand row"
@@ -112,14 +108,12 @@ export const PatientTable = (props: tableProps) => {
                         >
                           <IconButton
                             onClick={() => handleEdit!(patient)}
-                            disabled={!roleUser.permissions.find((permission: PermissionModel) => permission.name === "editar pacientes")}
-                          >
+                            >
                             <EditOutlined color="info" />
                           </IconButton>
                           <IconButton
                             onClick={() => deletePatient(patient.id)}
-                            disabled={!roleUser.permissions.find((permission: PermissionModel) => permission.name === "eliminar pacientes")}
-                          >
+                           >
                             <DeleteOutline color="error" />
                           </IconButton>
                         </Stack>
@@ -149,7 +143,7 @@ export const PatientTable = (props: tableProps) => {
         <ShowTable
           open={opendrawer.state}
           handleClose={() => handleTheths(false, [])}
-          title="Dientes"
+          title="Souvenires"
           headers={['#', 'Nombre', 'Modulo']}
           data={opendrawer.items}
         />

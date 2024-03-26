@@ -24,10 +24,9 @@ export const PatientView = () => {
         justifyContent="end"
       >
         <ComponentButton
-          text="Nuevo paciente"
+          text="Nuevo ponente"
           onClick={() => handleDialog(true)}
           startIcon={<SvgIcon fontSize="small"><Add /></SvgIcon>}
-          disable={!roleUser.permissions.find((permission: PermissionModel) => permission.name === "crear pacientes")}
         />
       </Stack>
       <PatientTable

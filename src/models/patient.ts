@@ -17,8 +17,6 @@ export interface FormPatientModel {
   phone: number;
   birthDate: Date | null;
   gender: string;
-  allergies: string;
-  bloodType: string;
 }
 
 /*VALIDATIONS */
@@ -29,6 +27,4 @@ export interface FormPatientValidations {
   phone: [(value: number) => boolean, string];
   birthDate: [(value: Date) => boolean, string];
   gender: [(value: string) => boolean, string];
-  allergies: [(value: string) => boolean, string];
-  bloodType: [(value: string) => boolean, string];
 }

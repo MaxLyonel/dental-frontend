@@ -14,21 +14,17 @@ interface createProps {
 }
 
 const formFields: FormTreatmenttModel = {
-  stageTypeId: null,
   patientId: null,
   description: '',
   date: null,
   totalAmount: 0,
-  thethIds: [],
 }
 
 const formValidations: FormTreatmentValidations = {
-  stageTypeId: [(value: any) => value != null, 'Debe ingresar el numero de carnet'],
   patientId: [(value: any) => value != 1, 'Debe ingresar el nombre'],
   description: [(value: string) => value.length >= 1, 'Debe ingresar el apellido'],
   date: [(value: Date) => value != null, 'Debe ingresar la fecha de nacimiento'],
   totalAmount: [(value: number) => value != 0, 'Debe ingresar el genero'],
-  thethIds: [(value: ThethModel[]) => value.length >= 1, 'Debe ingresar la alergia'],
 }
 
 export const CreateTreatment = (props: createProps) => {
@@ -41,9 +37,9 @@ export const CreateTreatment = (props: createProps) => {
 
   const [formSubmitted, setFormSubmitted] = useState(false);
   const {
-    stageTypeId, patientId, description, date, totalAmount, thethIds,
+    patientId, description, date, totalAmount,
     onInputChange, isFormValid, onResetForm, onValueChange,
-    stageTypeIdValid, patientIdValid, descriptionValid, dateValid, totalAmountValid, thethIdsValid,
+    patientIdValid, descriptionValid, dateValid, totalAmountValid,
   } = useForm(item ?? formFields, formValidations);
 
   const sendSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -54,22 +50,22 @@ export const CreateTreatment = (props: createProps) => {
     if (item == null) {
       postCreateTreatment(
         {
-          stageTypeId: stageTypeId.id,
+          stageTypeId: 1,
           patientId: patientId.id,
           description: description.trim(),
           date: date,
           totalAmount: parseFloat(totalAmount),
-          thethIds: thethIds.map((theth: ThethModel) => theth.id),
+          thethIds:[],
         });
     } else {
       putUpdateTreatment(item.treatmentId,
         {
-          stageTypeId: stageTypeId.id,
+          stageTypeId: 1,
           patientId: patientId.id,
           description: description.trim(),
           date: date,
           totalAmount: parseFloat(totalAmount),
-          thethIds: thethIds.map((theth: ThethModel) => theth.id),
+          thethIds: [],
         });
     }
     handleClose();
@@ -92,34 +88,13 @@ export const CreateTreatment = (props: createProps) => {
   }, []);
   return (
     <>
-      {
-        modalStageType &&
-        <ModalSelectComponent
-          stateSelect={true}
-          stateMultiple={false}
-          title='etapas:'
-          opendrawer={modalStageType}
-          handleDrawer={handleModalStageType}
-        >
-          <StageTypeTable
-            stateSelect={true}
-            limitInit={5}
-            itemSelect={(v) => {
-              if (stageTypeId == null || stageTypeId.id != v.id) {
-                onValueChange('stageTypeId', v)
-                handleModalStageType(false)
-              }
-            }}
-            items={stageTypeId == null ? [] : [stageTypeId.id]}
-          />
-        </ModalSelectComponent>
-      }
+
       {
         modalPatient &&
         <ModalSelectComponent
           stateSelect={true}
           stateMultiple={false}
-          title='pacientes:'
+          title='ponentes:'
           opendrawer={modalPatient}
           handleDrawer={handleModalPatient}
         >
@@ -136,46 +111,15 @@ export const CreateTreatment = (props: createProps) => {
           />
         </ModalSelectComponent>
       }
-      {
-        modalTheth &&
-        <ModalSelectComponent
-          stateSelect={true}
-          stateMultiple={true}
-          title='Dientes:'
-          opendrawer={modalTheth}
-          handleDrawer={handleModalTheth}
-        >
-          <ThethTable
-            stateSelect={true}
-            itemSelect={(v) => {
-              if (thethIds.map((e: ThethModel) => e.id).includes(v.id)) {
-                onValueChange('thethIds', [...thethIds.filter((e: ThethModel) => e.id != v.id)])
-              } else {
-                onValueChange('thethIds', [...thethIds, v])
-              }
-            }}
-            items={thethIds.map((e: ThethModel) => (e.id))}
-          />
-        </ModalSelectComponent>
-      }
       <Dialog open={open} onClose={handleClose} >
-        <DialogTitle>{item == null ? 'Nuevo Tratamiento' : `${item.description}`}</DialogTitle>
+        <DialogTitle>{item == null ? 'Nuevo Evento' : `${item.description}`}</DialogTitle>
         <form onSubmit={sendSubmit}>
           <DialogContent sx={{ display: 'flex' }}>
             <Grid container>
               <Grid item xs={12} sm={6} sx={{ padding: '5px' }}>
                 <ComponentSelect
-                  label={stageTypeId != null ? 'Etapa' : ''}
-                  title={stageTypeId != null ? stageTypeId.name : 'Etapa'}
-                  onPressed={() => handleModalStageType(true)}
-                  error={!!stageTypeIdValid && formSubmitted}
-                  helperText={formSubmitted ? stageTypeIdValid : ''}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} sx={{ padding: '5px' }}>
-                <ComponentSelect
-                  label={patientId != null ? 'Paciente' : ''}
-                  title={patientId != null ? patientId.user.name : 'Paciente'}
+                  label={patientId != null ? 'Ponente' : ''}
+                  title={patientId != null ? patientId.user.name : 'Ponente'}
                   onPressed={() => handleModalPatient(true)}
                   error={!!patientIdValid && formSubmitted}
                   helperText={formSubmitted ? patientIdValid : ''}
@@ -210,17 +154,6 @@ export const CreateTreatment = (props: createProps) => {
                   onChange={onInputChange}
                   error={!!totalAmountValid && formSubmitted}
                   helperText={formSubmitted ? totalAmountValid : ''}
-                />
-              </Grid>
-              <Grid item xs={12} sm={12} sx={{ padding: '5px' }}>
-                <ComponentSelect
-                  label={thethIds != null ? '' : 'Dientes'}
-                  title={'Dientes'}
-                  onPressed={() => handleModalTheth(true)}
-                  error={!!thethIdsValid && formSubmitted}
-                  helperText={formSubmitted ? thethIdsValid : ''}
-                  items={thethIds.map((e: ThethModel) => ({ id: e.id, name: e.name }))}
-                  onRemove={(v) => onValueChange('thethIds', [...thethIds.filter((e: ThethModel) => e.id != v)])}
                 />
               </Grid>
             </Grid>

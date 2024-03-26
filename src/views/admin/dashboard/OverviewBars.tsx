@@ -28,7 +28,7 @@ export const OverviewBars = () => {
             Actualizar
           </Button>
         )}
-        title="Cant. Tratamientos VS. Tiempo"
+        title="Cant. Eventos VS. Tiempo"
       />
       <CardContent>
         <Chart
@@ -43,7 +43,7 @@ export const OverviewBars = () => {
           }}
           series={[
             {
-              name: "tratamientos",
+              name: "eventos",
               data: dashboard.treatmentsLineTime.treatmentCounts
             }
           ]}

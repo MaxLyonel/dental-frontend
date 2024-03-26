@@ -35,11 +35,10 @@ export const CalendarView = () => {
         justifyContent="end"
       >
         <ComponentButton
-          text="Nuevo tratamiento"
+          text="Nuevo evento"
           onClick={() => handleDialog(true)}
           startIcon={<SvgIcon fontSize="small"><Add /></SvgIcon>}
-          disable={!roleUser.permissions.find((permission: PermissionModel) => permission.name === "crear tratamiento")}
-        />
+          />
       </Stack>
       <CalendarComponent
         screenHeight={screenHeight}

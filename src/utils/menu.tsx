@@ -14,7 +14,7 @@ export const menu = () => {
     },
     (roleUser.permissions.find((permission: PermissionModel) => permission.name === "ver calendario") &&
     {
-      title: "Tratamientos",
+      title: "Eventos",
       permission: "show-rent",
       group: [
         {
@@ -25,19 +25,18 @@ export const menu = () => {
         },
       ].filter(groupItem => groupItem !== undefined)
     }),
-    (roleUser.permissions.find((permission: PermissionModel) => permission.name === "ver pacientes") &&
     {
-      title: "Clientes",
+      title: "Personal",
       permission: "show-rent",
       group: [
         {
-          path: "/patientView",
-          title: "Pacientes",
+          path: "/ponentView",
+          title: "Ponentes",
           icon: <Group />,
           permission: "show-halls"
         },
       ].filter(groupItem => groupItem !== undefined)
-    }),
+    },
     (roleUser.permissions.find((permission: PermissionModel) => permission.name === "ver administradores") ||
       roleUser.permissions.find((permission: PermissionModel) => permission.name === "ver roles") ||
       roleUser.permissions.find((permission: PermissionModel) => permission.name === "ver permisos")) && {
